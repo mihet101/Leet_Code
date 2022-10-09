@@ -1,0 +1,53 @@
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution(object):
+    def findTarget(self, root, k):
+        """
+        :type root: TreeNode
+        :type k: int
+        :rtype: bool
+        """
+        visited = []
+       #hashmap of differences
+
+        if not root:
+            return False
+        return self._whatever(root, visited, k)
+
+    
+    def _whatever(self, root, visited, k):
+        if not root:
+            return False
+        
+        diff = k - root.val
+        if diff in visited:
+            return True
+
+        visited.append(root.val)
+
+        return self._whatever(root.left, visited, k) and self._whatever(root.right, visited, k)  
+       
+class BetterSolution(object):
+    def findTarget(self, root, k):
+        """
+        :type root: TreeNode
+        :type k: int
+        :rtype: bool
+        """
+        visited = {}
+        
+        def findTarget_aux(node):
+            if not node:
+                return False
+            if node.val in visited:
+                return True
+            
+            visited[k-node.val] = True
+            
+            return findTarget_aux(node.left) or findTarget_aux(node.right)
+        
+        return findTarget_aux(root)
